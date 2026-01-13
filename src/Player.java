@@ -9,13 +9,15 @@ public class Player {
 
     public Player(String user) {
         this.user = user;
-        damage = 10;
+        damage = (int) (Math.random() * 11);
         health = 100;
         levels = 0;
         exp = 0;
+        zombie = new Zombie();
     }
 
-    public int attack() {
+    public int attack(Zombie zombie) {
+        zombie.getHurt(damage);
         return damage;
     }
 
@@ -47,5 +49,9 @@ public class Player {
         } else if (exp >= 0) {
             System.out.println("You are level 0");
         }
+    }
+
+    public int getLevels() {
+        return levels;
     }
 }

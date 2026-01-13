@@ -7,7 +7,7 @@ public class Zombie {
     public Zombie() {
         health = 50;
         damage = 5;
-        exp = 25;
+        exp = (int) (Math.random() * 50);
     }
 
     public void getHurt(int dmg) {
@@ -16,7 +16,7 @@ public class Zombie {
         } else {
             health -= dmg;
             if (isDead()) {
-                System.out.println("Zombie killed. +50 exp");
+                System.out.println("Zombie killed. +" + exp +  " exp");
             }
         }
     }
