@@ -36,51 +36,52 @@ public class Player {
         }
     }
 
-
-    public int getLevels() {
+    public void levelChange() {
         if (exp >= 1000) {
             levels = 10;
             damage = 300;
-            health += 50;
         } else if (exp >= 900) {
             levels = 9;
             damage = 200;
-            health += 50;
         } else if (exp >= 800) {
             levels = 8;
             damage = 150;
-            health += 50;
         } else if (exp >= 700) {
             levels = 7;
             damage = 125;
-            health += 50;
         } else if (exp >= 600) {
             levels = 6;
             damage = 100;
-            health += 50;
         } else if (exp >= 500) {
             levels = 5;
             damage = 75;
-            health += 50;
         } else if (exp >= 400) {
             levels = 4;
             damage = 50;
-            health += 50;
-        } else if (exp >= 300) {
+        } else if (exp >= 250) {
             levels = 3;
             damage = 40;
-            health += 50;
-        } else if (exp >= 200) {
+        } else if (exp >= 150) {
             levels = 2;
             damage = 25;
-            health += 50;
-        } else if (exp >= 100) {
+        } else if (exp >= 60) {
             levels = 1;
             damage = 15;
-            health += 50;
         } else if (exp >= 0) {
             levels = 0;
         }
+    }
+
+    public void increaseHealth () {
+        health += 50;
+    }
+
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+
+    public int getLevels() {
         return levels;
     }
 
