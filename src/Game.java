@@ -4,68 +4,105 @@ public class Game {
 
     private Scanner scan;
     private Player p1;
-    private int zombieKilled;
+    private static int zombieKilledCounter = 0;
 
     public Game() {
         scan = new Scanner(System.in);
         p1 = null;
-        zombieKilled = 0;
     }
 
     public void play() {
         System.out.print("Enter your name: ");
         String p1Name = scan.nextLine();
         p1 = new Player(p1Name);
-        while (!isGameOver()) {
+        while (p1.getLevels() != 10) {
             Zombie zombie = new Zombie();
-            if (p1.getLevels() >= 5) {
-                System.out.println("ZOMBIE UPGRADED");
-                zombie.setHealth(250);
-                zombie.setDamage(100);
-                System.out.println("ZOMBIE HEALTH " + zombie.getHealth());
-                System.out.println("ZOMBIE DAMAGE " + zombie.getDamage());
+            if (p1.getLevels() >= 7) {
+                System.out.println("---------!!!!!!!WARNING!!!!!!!---------");
+                System.out.println("---------!!!!!!!WARNING!!!!!!!---------");
+                System.out.println("ZOMBIE HAS MUTATED TO LEVEL 3");
+                System.out.println("---------!!!!!!!WARNING!!!!!!!---------");
+                System.out.println("---------!!!!!!!WARNING!!!!!!!---------");
+                zombie.level7Zombie();
+            } else if (p1.getLevels() >= 5) {
+                System.out.println("---------WARNING!!!!!!!---------");
+                System.out.println("ZOMBIE HAS MUTATED TO LEVEL 2");
+                System.out.println("---------WARNING!!!!!!!---------");
+                zombie.level5Zombie();
             } else if (p1.getLevels() >= 3) {
-                System.out.println("ZOMBIE UPGRADED");
-                zombie.setHealth(100);
-                zombie.setDamage(50);
-                System.out.println("ZOMBIE HEALTH " + zombie.getHealth());
-                System.out.println("ZOMBIE DAMAGE " + zombie.getDamage());
+                System.out.println("---------WARNING---------");
+                System.out.println("ZOMBIE HAD MUTATED TO LEVEL 1");
+                System.out.println("---------WARNING---------");
+                zombie.level3Zombie();
             }
             System.out.println("Kill the zombie");
             while (!zombie.isDead()) {
                 System.out.println("1. Attack \n2. Check your level and exp");
                 String input = scan.nextLine();
                 if (input.equals("1")) {
-                    System.out.println("You attacked for " + p1.getDamage() + " damage");
-                    p1.attack(zombie);
-                    System.out.println("The zombie has " + zombie.getHealth() + " hp");
+                    int dealt = p1.attack(zombie);
+                    System.out.println("ATTACKED FOR: " + dealt + " damage");
+                    System.out.println("ZOMBIE HP: " + zombie.getHealth());
                     System.out.println("-------------------------");
-                    p1.takeDamage(zombie.attack());
-                    System.out.println("The zombie attacked you for " + zombie.getDamage() + " damage.");
-                    System.out.println("You have " + p1.getHealth() + " hp");
-                    System.out.println("ARE YOU DEAD: " + p1.isDead());
-
-                }
-                if (input.equals("2")) {
-                    System.out.println("You are level " + p1.getLevels() + " and you have " + p1.getExp() + " exp");
+                    int zombieDealt = zombie.attack();
+                    p1.takeDamage(zombieDealt);
+                    System.out.println("ZOMBIE ATTACKS FOR: " + zombieDealt + " damage");
+                    System.out.println("HP: " + p1.getHealth());
+                    if (p1.getHealth() <= 0) {
+                        System.out.println("You died. Game over.");
+                        System.out.println("ZOMBIE KILLED: " + zombieKilledCounter);
+                        System.out.println("FINAL LEVEL: " + p1.getLevels());
+                        return;
+                    }
+                } else if (input.equals("2")) {
+                    System.out.println("LEVEL: " + p1.getLevels() +
+                            "\nEXP: " + p1.getExp() +
+                            "\nHEALTH: " + p1.getHealth() +
+                            "\nZOMBIE FLESH: " + p1.getZombieFlesh());
+                } else {
+                    System.out.println("Invalid input");
                 }
             }
-            zombieKilled++;
+            zombieKilledCounter++;
             p1.expGain(zombie.expDrop());
-            p1.levelChange();
-            p1.increaseHealth();
-            System.out.println("You have " + p1.getExp() + " exp and you are level " + p1.getLevels());
+            System.out.println("EXP: " + p1.getExp() + "\nLEVEL: " + p1.getLevels());
+            int zombieFleshAmount  = zombie.zombieFleshDrop();
+            System.out.println("+ " + zombieFleshAmount + " ZOMBIE FLESH");
+            p1.addZombieFlesh(zombieFleshAmount);
+            System.out.println("You have " + p1.getZombieFlesh() + " zombie flesh");
+            System.out.println("Would you like to use a healing potion?");
+            HealthPotion small = new HealthPotion("Small Healing Potion", 30, 10);
+            HealthPotion medium = new HealthPotion("Medium Healing Potion", 75, 20);
+            HealthPotion large = new HealthPotion("Large Healing Potion", 180, 40);
+            HealthPotion huge = new HealthPotion("Huge Healing Potion", 250, 60);
+            HealthPotion giant = new HealthPotion("Giant Healing Potion", 500, 90);
+
+            System.out.println("1. " + small.getName() + " (" + small.getHeal() + " HP) - " + small.getCost() + " zombie flesh");
+            System.out.println("2. " + medium.getName() + " (" + medium.getHeal() + " HP) - " + medium.getCost() + " zombie flesh");
+            System.out.println("3. " + large.getName() + " (" + large.getHeal() + " HP) - " + large.getCost() + " zombie flesh");
+            System.out.println("4. " + huge.getName() + " (" + huge.getHeal() + " HP) - " + huge.getCost() + " zombie flesh");
+            System.out.println("5. " + giant.getName() + " (" + giant.getHeal() + " HP) - " + giant.getCost() + " zombie flesh");
+
+            System.out.println("6. Skip");
+            String choice = scan.nextLine();
+            if (Integer.parseInt(choice) == 1) {
+                p1.usePotion(small);
+            } else if (Integer.parseInt(choice) == 2) {
+                p1.usePotion(medium);
+            } else if (Integer.parseInt(choice) == 3) {
+                p1.usePotion(large);
+            } else if (Integer.parseInt(choice) == 4) {
+                p1.usePotion(huge);
+            } else if (Integer.parseInt(choice) == 5) {
+                p1.usePotion(giant);
+            } else if (Integer.parseInt(choice) == 6){
+                System.out.println("Skipping the purchase of healing potions");
+            } else {
+                System.out.println("INVALID, SKIPPING HEALING POTIONS");
+            }
         }
-        endGameStats();
+        System.out.println("ZOMBIE KILLED: " + zombieKilledCounter);
+        System.out.println("Congratulations! You reached level 10!");
     }
 
-    public boolean isGameOver() {
-        return (p1.isDead() || p1.getLevels() >= 10);
-    }
-
-    public void endGameStats() {
-        System.out.println("Level: " + p1.getLevels());
-        System.out.println("EXP: " + p1.getExp());
-        System.out.println("Zombie killed: " + zombieKilled);
-    }
 }
