@@ -8,26 +8,26 @@ public class Zombie {
     public Zombie() {
         health = 50;
         damage = 5;
-        zombieFlesh = (int) (Math.random() * 11) + 5;
+        zombieFlesh = (int) (Math.random() * 11) + 5; // 5-15
         exp = (int) (Math.random() * 50);
     }
 
     public void level3Zombie() {
         health = 100;
         damage = 20;
-        zombieFlesh = (int) (Math.random() * 16) + 20;
+        zombieFlesh = (int) (Math.random() * 16) + 20; // 20-35
     }
 
     public void level5Zombie() {
         health = 300;
         damage = 50;
-        zombieFlesh = (int) (Math.random() * 16) + 30;
+        zombieFlesh = (int) (Math.random() * 16) + 30; // 30-45
     }
 
     public void level7Zombie() {
         health = 500;
         damage = 100;
-        zombieFlesh = (int) (Math.random() * 16) + 40;
+        zombieFlesh = (int) (Math.random() * 16) + 40; // 40-55
     }
 
     public void takeDamage(int dmg) {
