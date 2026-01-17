@@ -19,6 +19,9 @@ public class Player {
     }
 
     public int attack(Zombie zombie) {
+        // 0.1 chance of critical damage
+        // 0.7 chance of normal damage
+        // 0.2 chance of no damage
         int chance = (int)(Math.random()*10 + 1);
         int dealt = damage;
         if (chance == 10) {
@@ -84,7 +87,7 @@ public class Player {
         return levels;
     }
 
-    public void checkLevel() {
+    public void checkLevel() { // +50 hp if leveled up
         int oldLevel = levels;
         if (levels > oldLevel) {
             health+=50;
@@ -121,10 +124,5 @@ public class Player {
 
     public int getZombieFlesh() {
         return zombieFlesh;
-    }
-}
-
-    public int getHealth() {
-        return health;
     }
 }
